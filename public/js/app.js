@@ -159,20 +159,19 @@ document.getElementById('export-btn').addEventListener('click', async () => {
   // Open CSV download
   window.open('/export.csv', '_blank');
 
-  // Wait for download to start, then clear everything
+  // Wait 3 seconds for Render to wake up, then clear everything
   setTimeout(async () => {
     try {
-      // Clear local IndexedDB
       await clearLocalDB();
-      // Clear server database
-      await fetch('/records', { method: 'DELETE' });
+      const res = await fetch('/records', { method: 'DELETE' });
+      if (!res.ok) throw new Error('Server error');
       showToast('Records cleared after export ✓', 'success');
       renderRecordsPanel();
       updateSyncBadge();
     } catch (err) {
       showToast('Export done but clear failed — try again', 'warn');
     }
-  }, 1500);
+  }, 3000);
 });
 
 // --- INIT ---

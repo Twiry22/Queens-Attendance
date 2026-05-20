@@ -89,9 +89,14 @@ app.get('/export.csv', (req, res) => {
 
 // DELETE /records — clear all
 app.delete('/records', (req, res) => {
-  db.run('DELETE FROM checkins');
-  saveDB();
-  res.json({ ok: true });
+  try {
+    db.run('DELETE FROM checkins');
+    saveDB();
+    res.json({ ok: true });
+  } catch (err) {
+    console.error('Clear error:', err);
+    res.status(500).json({ ok: false, error: err.message });
+  }
 });
 
 initDB().then(() => {
