@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#0f0f0f" />
+  <meta name="description" content="Offline-first event attendance for Queen's sub-groups" />
+  <title> HOB Queens Attendance</title>
+  <link rel="manifest" href="/manifest.json" />
+  <link rel="stylesheet" href="/css/style.css" />
+</head>
+<body>
+  <div class="app-shell">
+
+    <header class="header">
+      <div class="header-left">
+        <h1> HoB Queens Attendance</h1>
+        <p>Offline-first check-in</p>
+      </div>
+      <div class="status-row">
+        <span class="dot dot--offline" id="online-dot"></span>
+        <span id="online-label">Offline</span>
+      </div>
+    </header>
+
+    <!-- Tabs -->
+    <div class="tabs">
+      <button class="tab active" data-tab="checkin">Check in</button>
+      <button class="tab" data-tab="records">Records</button>
+    </div>
+
+    <!-- Check-in panel -->
+    <div class="panel active" id="panel-checkin">
+      <form id="checkin-form" autocomplete="off">
+        <div class="form-group">
+          <label for="f-name">Full name</label>
+          <input type="text" id="f-name" placeholder="e.g. Amara Osei" required />
+        </div>
+        <div class="form-group">
+          <label for="f-phone">Phone number</label>
+          <input type="tel" id="f-phone" placeholder="e.g. 0712 345 678" required />
+        </div>
+        <div class="form-group">
+          <label for="f-subgroup">Queen's sub-group</label>
+          <div class="select-wrap">
+            <select id="f-subgroup" required>
+              <option value="">— Select sub-group —</option>
+            </select>
+          </div>
+        </div>
+        <button type="submit" class="btn-submit">Submit check-in</button>
+      </form>
+    </div>
+
+    <!-- Records panel -->
+    <div class="panel" id="panel-records">
+      <!-- Sync bar -->
+      <div class="sync-bar">
+        <div class="sync-bar-left">
+          <span>Unsynced:</span>
+          <span id="sync-badge">0</span>
+        </div>
+        <div style="display:flex;gap:8px;">
+          <button class="btn-sync" id="sync-btn">Sync now</button>
+          <button class="btn-export" id="export-btn">Export CSV</button>
+        </div>
+      </div>
+
+      <!-- Stats -->
+      <div class="stats">
+        <div class="stat">
+          <div class="stat-label">Total</div>
+          <div class="stat-value" id="s-total">0</div>
+        </div>
+        <div class="stat">
+          <div class="stat-label">Sub-groups</div>
+          <div class="stat-value" id="s-groups">0</div>
+        </div>
+        <div class="stat">
+          <div class="stat-label">Unsynced</div>
+          <div class="stat-value" id="s-unsynced">0</div>
+        </div>
+      </div>
+
+      <!-- Records table -->
+      <div class="records-header">
+        <h3>Attendance log <span id="records-source"></span></h3>
+      </div>
+      <div id="records-container">
+        <p class="empty">Switch to this tab to load records.</p>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="toast" id="toast" role="alert" aria-live="polite"></div>
+
+  <script src="/js/db.js"></script>
+  <script src="/js/sync.js"></script>
+  <script src="/js/app.js"></script>
+</body>
+</html>
