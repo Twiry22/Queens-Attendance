@@ -1,4 +1,4 @@
-// Sub-groups — edit this list to match your actual Queen's sub-groups
+// Sub-groups
 const SUBGROUPS = ['Pendo', 'Roses of Sharon', 'Favour', 'Victorious', 'Angels', 'Abigael', 'Daughters Of Destiny'];
 
 function generateId() {
@@ -72,7 +72,6 @@ async function handleCheckin(e) {
   showToast(`${name} checked in ✓`, 'success');
   updateSyncBadge();
 
-  // Try to sync immediately if online
   if (navigator.onLine) {
     const result = await syncToServer();
     if (result.status === 'ok') updateSyncBadge();
@@ -89,7 +88,6 @@ async function renderRecordsPanel() {
 
   if (navigator.onLine) {
     try {
-      // Sync first, then load from server for full picture
       await syncToServer();
       records = await fetchServerRecords();
       source = 'server';
@@ -103,7 +101,6 @@ async function renderRecordsPanel() {
 
   updateSyncBadge();
 
-  // Stats
   document.getElementById('s-total').textContent = records.length;
   const groups = new Set(records.map(r => r.subgroup)).size;
   document.getElementById('s-groups').textContent = groups;
@@ -155,10 +152,27 @@ document.getElementById('sync-btn').addEventListener('click', async () => {
   updateSyncBadge();
 });
 
-// --- EXPORT ---
-document.getElementById('export-btn').addEventListener('click', () => {
+// --- EXPORT + CLEAR ---
+document.getElementById('export-btn').addEventListener('click', async () => {
   if (!navigator.onLine) { showToast('Export requires internet connection', 'warn'); return; }
+
+  // Open CSV download
   window.open('/export.csv', '_blank');
+
+  // Wait for download to start, then clear everything
+  setTimeout(async () => {
+    try {
+      // Clear local IndexedDB
+      await clearLocalDB();
+      // Clear server database
+      await fetch('/records', { method: 'DELETE' });
+      showToast('Records cleared after export ✓', 'success');
+      renderRecordsPanel();
+      updateSyncBadge();
+    } catch (err) {
+      showToast('Export done but clear failed — try again', 'warn');
+    }
+  }, 1500);
 });
 
 // --- INIT ---
