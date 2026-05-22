@@ -1,5 +1,5 @@
 // Sub-groups
-const SUBGROUPS = ['Pendo', 'Roses of Sharon', 'Favour', 'Victorious', 'Angels', 'Abigael', 'Daughters Of Destiny'];
+const SUBGROUPS = ['Pendo', 'Roses of Sharon', 'Favour', 'Victorious', 'Angels', 'Abigael', 'Daughters Of Destiny', 'Visitors', 'Pastors'];
 
 function generateId() {
   return Date.now().toString(36) + Math.random().toString(36).slice(2, 7);
@@ -156,10 +156,8 @@ document.getElementById('sync-btn').addEventListener('click', async () => {
 document.getElementById('export-btn').addEventListener('click', async () => {
   if (!navigator.onLine) { showToast('Export requires internet connection', 'warn'); return; }
 
-  // Open CSV download
   window.open('/export.csv', '_blank');
 
-  // Wait 3 seconds for Render to wake up, then clear everything
   setTimeout(async () => {
     try {
       await clearLocalDB();
