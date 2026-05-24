@@ -100,6 +100,9 @@ app.delete('/records', (req, res) => {
 });
 
 initDB().then(() => {
+  app.get('/download-db', (req, res) => {
+  res.download('./attendance.db');
+});
   app.listen(PORT, () => {
     console.log(`\n✅  Queen's Attendance server running`);
     console.log(`   Local:   http://localhost:${PORT}`);
