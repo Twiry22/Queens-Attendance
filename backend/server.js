@@ -98,11 +98,11 @@ app.delete('/records', (req, res) => {
     res.status(500).json({ ok: false, error: err.message });
   }
 });
-
-initDB().then(() => {
-  app.get('/download-db', (req, res) => {
+app.get('/download-db', (req, res) => {
   res.download('./attendance.db');
 });
+
+initDB().then(() => {
   app.listen(PORT, () => {
     console.log(`\n✅  Queen's Attendance server running`);
     console.log(`   Local:   http://localhost:${PORT}`);
