@@ -98,7 +98,10 @@ app.delete('/records', (req, res) => {
     res.status(500).json({ ok: false, error: err.message });
   }
 });
-app.get('/download-db', (req, res) => {
+app.get('/attendance-db', (req, res) => {
+  if (req.query.key !== 'thetrainleft') {
+    return res.status(403).send('Forbidden');
+  }
   res.download('./attendance.db');
 });
 
